@@ -20,6 +20,6 @@ if %ERRORLEVEL% NEQ 0 (
 echo.
 echo [Stage 2] Installing and running...
 echo ========================================
-call run.bat
+call "%~dp0run.bat"
 
 pause

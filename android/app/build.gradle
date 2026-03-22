@@ -7,11 +7,27 @@ android {
     compileSdk 33
 
     defaultConfig {
-        applicationId "com.hmrdp"
+        applicationId "com.example.hmrdp"
         minSdk 24
         targetSdk 33
         versionCode 1
         versionName "1.0"
+
+        ndk {
+            abiFilters 'arm64-v8a', 'armeabi-v7a', 'x86_64'
+        }
+    }
+
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ['libs']
+        }
+    }
+
+    packagingOptions {
+        jniLibs {
+            useLegacyPackaging true
+        }
     }
 
     buildTypes {
@@ -28,6 +44,7 @@ android {
 
 dependencies {
     implementation 'androidx.appcompat:appcompat:1.6.1'
-    // ArkUI-X dependency (requires ArkUI-X SDK)
-    // implementation 'org.ohos:ace_x86_android:1.0.0'
+
+    // ArkUI-X Android Adapter (requires arkui_android_adapter.jar in libs folder)
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
 }

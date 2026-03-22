@@ -11,6 +11,9 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
+        // Huawei Maven repository for ArkUI-X
+        maven { url 'https://repo.huaweicloud.com/repository/maven/' }
+        maven { url 'https://developer.huawei.com/repo/' }
     }
 }
 
