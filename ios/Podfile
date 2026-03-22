@@ -1,0 +1,10 @@
+# iOS Podfile for HelloApp
+# Requires: macOS + Xcode + CocoaPods
+
+platform :ios, '12.0'
+use_frameworks!
+
+target 'HelloApp' do
+  # ArkUI-X iOS dependency (if available)
+  # pod 'ArkUIX', '~> 1.0'
+end
