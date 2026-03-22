@@ -1,30 +1,31 @@
 @echo off
 chcp 65001 >nul
 echo ========================================
-echo   HarmonyOS HAP 编译脚本
+echo   HarmonyOS HAP Build Script
 echo ========================================
 echo.
 
-cd /d %~dp0
+set PROJECT_ROOT=%~dp0..\..\
+cd /d %PROJECT_ROOT%ohos
 
-echo [1/2] 清理旧的构建缓存...
+echo [1/2] Cleaning old build cache...
 if exist "entry\build" rd /s /q "entry\build"
 
-echo [2/2] 开始编译 HAP...
+echo [2/2] Building HAP...
 "C:\Program Files\Huawei\DevEco Studio\tools\hvigor\bin\hvigorw.bat" --no-daemon -p product=default -p module=entry@default assembleHap --analyze=normal --parallel --incremental
 
 echo.
 if %ERRORLEVEL% EQU 0 (
     echo ========================================
-    echo   编译成功!
+    echo   Build Success!
     echo ========================================
     echo.
-    echo HAP 文件位置:
-    echo %~dp0entry\build\default\outputs\default\entry-default-unsigned.hap
+    echo HAP Location:
+    echo %PROJECT_ROOT%ohos\entry\build\default\outputs\default\entry-default-unsigned.hap
     echo.
 ) else (
     echo ========================================
-    echo   编译失败! 请检查错误信息
+    echo   Build Failed! Check error messages.
     echo ========================================
     echo.
 )
