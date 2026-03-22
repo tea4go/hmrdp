@@ -3,11 +3,11 @@ plugins {
 }
 
 android {
-    namespace 'com.example.helloapp'
+    namespace 'com.hmrdp'
     compileSdk 33
 
     defaultConfig {
-        applicationId "com.example.helloapp"
+        applicationId "com.hmrdp"
         minSdk 24
         targetSdk 33
         versionCode 1

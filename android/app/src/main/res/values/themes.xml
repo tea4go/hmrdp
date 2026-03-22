@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="Theme.HelloApp" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="Theme.Hmrdp" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimary">#007DFF</item>
         <item name="colorPrimaryDark">#005BBB</item>
         <item name="colorAccent">#007DFF</item>
