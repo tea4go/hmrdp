@@ -1,9 +1,0 @@
-{
-  "name": "common",
-  "version": "1.0.0",
-  "description": "Common shared module for ArkUI-X cross-platform application",
-  "main": "",
-  "author": "",
-  "license": "ISC",
-  "dependencies": {}
-}

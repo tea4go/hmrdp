@@ -22,3 +22,7 @@ local.properties
 
 # Claude Code
 .claude/
+
+# 同步的代码目录（从 ohos/entry 同步，不单独跟踪）
+android/app/src/main/ets/
+ios/HelloApp/ets/
