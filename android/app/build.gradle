@@ -28,5 +28,6 @@ android {
 
 dependencies {
     implementation 'androidx.appcompat:appcompat:1.6.1'
-    implementation 'org.ohos:ace_x86_android:1.0.0'
+    // ArkUI-X dependency (requires ArkUI-X SDK)
+    // implementation 'org.ohos:ace_x86_android:1.0.0'
 }
