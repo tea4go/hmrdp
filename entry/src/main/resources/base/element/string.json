@@ -1,0 +1,16 @@
+{
+  "string": [
+    {
+      "name": "module_desc",
+      "value": "ArkUI-X Cross Platform App"
+    },
+    {
+      "name": "EntryAbility_desc",
+      "value": "Main Entry Ability"
+    },
+    {
+      "name": "EntryAbility_label",
+      "value": "HelloApp"
+    }
+  ]
+}
