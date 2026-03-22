@@ -2,6 +2,25 @@
 **/build/
 **/.hvigor/
 **/node_modules/
+**/.gradle/
+**/.cxx/
+**/.externalNativeBuild/
+**/.kotlin/
+**/.swiftpm/
+**/.build/
+**/DerivedData/
+**/Pods/
+**/oh_modules/
+**/.preview/
+**/.cache/
+**/*.apk
+**/*.aab
+**/*.ipa
+**/*.dSYM/
+**/*.dSYM.zip
+**/*.xcuserstate
+**/*.xcuserdata/
+**/*.xcscmblueprint
 
 # IDE
 .idea/
@@ -14,11 +33,28 @@ Thumbs.db
 
 # Local config
 local.properties
+.env
+.env.*
+!.env.example
+*.keystore
+*.jks
+*.p12
+*.pfx
+*.mobileprovision
+*.pem
+*.cer
+*.crt
+*.key
+*.der
 
 # Temp files
 *.tmp
 *.temp
 *.log
+*.swp
+*.swo
+*.orig
+*.rej
 
 # Claude Code
 .claude/
