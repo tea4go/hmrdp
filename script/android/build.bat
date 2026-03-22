@@ -9,6 +9,15 @@ set SCRIPT_DIR=%~dp0
 set PROJECT_ROOT=%SCRIPT_DIR%..\..\
 set ANDROID_DIR=%PROJECT_ROOT%android
 
+:: Set proxy
+set HTTP_PROXY=http://192.168.100.1:32124
+set HTTPS_PROXY=http://192.168.100.1:32124
+set http_proxy=http://192.168.100.1:32124
+set https_proxy=http://192.168.100.1:32124
+
+echo Using proxy: %HTTP_PROXY%
+echo.
+
 :: Sync code first
 echo [1/3] Syncing shared code...
 call "%PROJECT_ROOT%sync-code.bat"
