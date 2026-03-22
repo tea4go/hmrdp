@@ -12,8 +12,8 @@
   },
   "modules": [
     {
-      "name": "entry",
-      "srcPath": "./entry",
+      "name": "common",
+      "srcPath": "./common",
       "targets": [
         {
           "name": "default",

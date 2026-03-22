@@ -1,10 +1,7 @@
-// Cross-platform shared ArkUI code
-// This file is shared between HarmonyOS, Android, and iOS
-
 @Entry
 @Component
 struct Index {
-  @State message: string = 'Hello'
+  @State message: string = 'Hello ArkUI-X'
 
   build() {
     Row() {
