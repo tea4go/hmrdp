@@ -13,7 +13,7 @@
   "modules": [
     {
       "name": "common",
-      "srcPath": "../common",
+      "srcPath": "./common",
       "targets": [
         {
           "name": "default",

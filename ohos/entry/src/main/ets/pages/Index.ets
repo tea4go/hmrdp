@@ -1,2 +1,12 @@
-// Re-export Index page from common module
-export { Index } from 'common/pages/Index'
+// Import shared component from common module using relative path
+import { IndexPage } from '../../../common/src/main/ets/pages/Index'
+
+@Entry
+@Component
+struct Index {
+  build() {
+    Column() {
+      IndexPage()
+    }
+  }
+}

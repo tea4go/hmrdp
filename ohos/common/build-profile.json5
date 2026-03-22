@@ -2,12 +2,6 @@
   "apiType": "stageMode",
   "buildOption": {
   },
-  "buildOptionSet": [
-    {
-      "name": "releasePluginType",
-      "value": "HarPlugin"
-    }
-  ],
   "targets": [
     {
       "name": "default"

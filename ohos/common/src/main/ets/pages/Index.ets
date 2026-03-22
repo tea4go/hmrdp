@@ -1,6 +1,6 @@
-@Entry
+// Shared Index component (without @Entry for reusability)
 @Component
-struct Index {
+export struct IndexPage {
   @State message: string = 'Hello ArkUI-X'
 
   build() {

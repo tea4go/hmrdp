@@ -1,2 +1,5 @@
-// Re-export EntryAbility from common module
-export { default } from 'common/entryability/EntryAbility'
+// Import EntryAbility from common module using relative path
+import EntryAbilityBase from '../../../common/src/main/ets/entryability/EntryAbility'
+
+export default class EntryAbility extends EntryAbilityBase {
+}
