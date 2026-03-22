@@ -8,7 +8,8 @@ echo.
 
 set PROJECT_ROOT=%~dp0..\..\
 set APK_PATH=%PROJECT_ROOT%android\app\build\outputs\apk\debug\app-debug.apk
-set PACKAGE_NAME=com.hmrdp
+set PACKAGE_NAME=com.example.hmrdp
+set ACTIVITY_NAME=com.hmrdp.EntryEntryAbilityActivity
 
 :: Detect Android SDK path from local.properties
 set LOCAL_PROPS=%PROJECT_ROOT%android\local.properties
@@ -58,17 +59,20 @@ echo.
 
 :: Install APK
 echo [2/3] Installing app to device...
+echo Please accept the installation on your device...
 "!ADB_EXE!" install -r "%APK_PATH%"
 if !ERRORLEVEL! NEQ 0 (
     echo [Error] Installation failed.
     pause
     exit /b 1
 )
+echo Waiting for installation to complete (5 seconds)...
+ping 127.0.0.1 -n 6 >nul
 echo.
 
 :: Launch app
 echo [3/3] Launching app...
-"!ADB_EXE!" shell am start -n %PACKAGE_NAME%/.MainActivity
+"!ADB_EXE!" shell am start -n %PACKAGE_NAME%/%ACTIVITY_NAME%
 if !ERRORLEVEL! NEQ 0 (
     echo [Error] Launch failed.
     pause
