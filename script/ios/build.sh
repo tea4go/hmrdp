@@ -91,13 +91,28 @@ fi
 
 # Build
 echo "[3/4] Building iOS app..."
-SIM_DEST=$(xcrun simctl list devices available | grep -m1 'iPhone' | sed 's/.*(\(.*\)) (.*/\1/' | xargs -I{} echo "platform=iOS Simulator,id={}" 2>/dev/null || echo "platform=iOS Simulator,name=iPhone 16")
+
+# Prefer a booted simulator, fall back to first available iPhone
+SIM_ID=$(xcrun simctl list devices | grep -m1 'iPhone.*Booted' | sed 's/.*(\([A-F0-9-]*\)).*/\1/' 2>/dev/null)
+if [ -z "$SIM_ID" ]; then
+    SIM_ID=$(xcrun simctl list devices available | grep -m1 'iPhone' | sed 's/.*(\([A-F0-9-]*\)).*/\1/' 2>/dev/null)
+fi
+if [ -n "$SIM_ID" ]; then
+    SIM_DEST="platform=iOS Simulator,id=$SIM_ID"
+else
+    SIM_DEST="platform=iOS Simulator,name=iPhone 16"
+fi
+
+BUILD_DIR="$IOS_DIR/build"
 
 xcodebuild -project HelloApp.xcodeproj \
            -scheme HelloApp \
            -configuration Debug \
            -destination "$SIM_DEST" \
+           -derivedDataPath "$BUILD_DIR" \
            TOOLCHAINS=com.apple.dt.toolchain.XcodeDefault
+
+APP_PATH="$BUILD_DIR/Build/Products/Debug-iphonesimulator/HelloApp.app"
 
 echo "[4/4] Build complete!"
 echo ""
@@ -105,8 +120,6 @@ echo "========================================"
 echo "  Build Success!"
 echo "========================================"
 echo ""
-echo "To run on simulator:"
-echo "  xcodebuild -project HelloApp.xcodeproj -scheme HelloApp -destination 'platform=iOS Simulator,name=iPhone 16'"
+echo "App: $APP_PATH"
 echo ""
-echo "To run on device:"
-echo "  Open HelloApp.xcworkspace in Xcode and press Cmd+R"
+echo "Run: bash script/ios/run.sh"

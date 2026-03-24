@@ -3,7 +3,7 @@
 @Entry
 @Component
 struct Index {
-  @State message: string = 'Hello ArkUI-X'
+  @State message: string = 'Hello ArkUI-X 2026-03-24'
 
   build() {
     Row() {
