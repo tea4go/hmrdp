@@ -75,6 +75,17 @@ pnpm-debug.log*
 # Claude Code
 .claude/
 
-# 同步的代码目录（从 ohos/entry 同步，不单独跟踪）
+# 同步代码目录（从 ohos/entry 同步，不单独跟踪）
 android/app/src/main/ets/
 ios/HelloApp/ets/
+
+# iOS 同步产物（由 sync-code.sh 生成）
+ios/HelloApp/arkui-x/entry/
+ios/HelloApp/arkui-x/systemres/
+
+# iOS SDK 二进制（从 ArkUI-X SDK 拷贝）
+ios/libarkui_ios.xcframework/
+
+# iOS 本机/工具生成文件（若以 project.yml + xcodegen 为准）
+ios/HelloApp.xcodeproj/
+ios/HelloApp.xcworkspace/

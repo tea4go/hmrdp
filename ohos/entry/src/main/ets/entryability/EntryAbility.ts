@@ -5,35 +5,68 @@ import hilog from '@ohos.hilog';
 import window from '@ohos.window';
 
 export default class EntryAbility extends UIAbility {
-  onCreate(want, launchParam) {
-    hilog.info(0x0000, 'testTag', '%{public}s', 'Ability onCreate');
+  private readonly domain = 0x0000;
+  private readonly tag = 'testTag';
+
+  private safeStringify(value: unknown): string {
+    if (value === undefined) {
+      return 'undefined';
+    }
+    try {
+      return JSON.stringify(value);
+    } catch (_err) {
+      return '[unserializable]';
+    }
+  }
+
+  private logInfo(message: string): void {
+    try {
+      hilog.info(this.domain, this.tag, '%{public}s', message);
+    } catch (_err) {
+      console.info(`[EntryAbility] ${message}`);
+    }
+  }
+
+  private logError(message: string): void {
+    try {
+      hilog.error(this.domain, this.tag, '%{public}s', message);
+    } catch (_err) {
+      console.error(`[EntryAbility] ${message}`);
+    }
+  }
+
+  onCreate(want?: Record<string, unknown>, launchParam?: unknown) {
+    const wantInfoObject: unknown = want ? want['info'] : undefined;
+    const wantInfo: string = this.safeStringify(wantInfoObject);
+    const launchInfo: string = this.safeStringify(launchParam);
+    this.logInfo(`Ability onCreate. want.info=${wantInfo}, launchParam=${launchInfo}`);
   }
 
   onDestroy() {
-    hilog.info(0x0000, 'testTag', '%{public}s', 'Ability onDestroy');
+    this.logInfo('Ability onDestroy');
   }
 
   onWindowStageCreate(windowStage: window.WindowStage) {
-    hilog.info(0x0000, 'testTag', '%{public}s', 'Ability onWindowStageCreate');
+    this.logInfo('Ability onWindowStageCreate');
 
     windowStage.loadContent('pages/Index', (err, data) => {
       if (err.code) {
-        hilog.error(0x0000, 'testTag', 'Failed to load the content. Cause: %{public}s', JSON.stringify(err));
+        this.logError(`Failed to load the content. Cause: ${this.safeStringify(err)}`);
         return;
       }
-      hilog.info(0x0000, 'testTag', 'Succeeded in loading the content. Data: %{public}s', JSON.stringify(data));
+      this.logInfo(`Succeeded in loading the content. Data: ${this.safeStringify(data)}`);
     });
   }
 
   onWindowStageDestroy() {
-    hilog.info(0x0000, 'testTag', '%{public}s', 'Ability onWindowStageDestroy');
+    this.logInfo('Ability onWindowStageDestroy');
   }
 
   onForeground() {
-    hilog.info(0x0000, 'testTag', '%{public}s', 'Ability onForeground');
+    this.logInfo('Ability onForeground');
   }
 
   onBackground() {
-    hilog.info(0x0000, 'testTag', '%{public}s', 'Ability onBackground');
+    this.logInfo('Ability onBackground');
   }
 }
