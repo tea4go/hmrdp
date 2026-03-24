@@ -1,6 +1,6 @@
 #!/bin/bash
 # iOS Build Script (run on macOS)
-# Requirements: macOS 12+, Xcode 14+, xcodegen
+# Requirements: macOS 12+, Xcode 14+, xcodegen, DevEco Studio (for HarmonyOS build)
 
 set -e
 
@@ -60,10 +60,30 @@ EOF
 create_ace_umbrella_if_missing "$ARKUI_XCFRAMEWORK/ios-arm64/libarkui_ios.framework"
 create_ace_umbrella_if_missing "$ARKUI_XCFRAMEWORK/ios-arm64_x86_64-simulator/libarkui_ios.framework"
 
-# Sync code first
-echo "[1/4] Syncing shared code..."
+# Build HarmonyOS module to get fresh modules.abc
+echo "[1/5] Building HarmonyOS module (compiling ArkTS)..."
+HVIGORW=""
+if command -v hvigorw &>/dev/null; then
+    HVIGORW="hvigorw"
+elif [ -f "/Applications/DevEco-Studio.app/Contents/tools/hvigor/bin/hvigorw" ]; then
+    HVIGORW="/Applications/DevEco-Studio.app/Contents/tools/hvigor/bin/hvigorw"
+fi
+
+if [ -n "$HVIGORW" ]; then
+    cd "$PROJECT_ROOT/ohos"
+    "$HVIGORW" --no-daemon -p product=default -p module=entry@default assembleHap \
+        --analyze=normal --parallel --incremental
+    cd "$PROJECT_ROOT"
+    echo "  HarmonyOS build done."
+else
+    echo "  WARNING: hvigorw not found, skipping HarmonyOS build."
+    echo "  modules.abc may be stale — build manually in DevEco Studio first."
+fi
+
+# Sync code (ETS source + compiled modules.abc → ios/)
+echo "[2/5] Syncing shared code..."
 cd "$PROJECT_ROOT"
-./sync-code.bat 2>/dev/null || ./sync-code.sh 2>/dev/null || true
+./sync-code.sh
 
 cd "$IOS_DIR"
 
@@ -74,7 +94,7 @@ unset SWIFT_EXEC_TOOLCHAIN_DIR
 unset SWIFT_DRIVER_SWIFT_FRONTEND_EXEC
 
 # Generate Xcode project via xcodegen
-echo "[2/4] Generating Xcode project..."
+echo "[3/5] Generating Xcode project..."
 if ! command -v xcodegen &>/dev/null; then
     echo "ERROR: xcodegen not found. Install with: brew install xcodegen"
     exit 1
@@ -90,7 +110,7 @@ if [ -f "Podfile" ]; then
 fi
 
 # Build
-echo "[3/4] Building iOS app..."
+echo "[4/5] Building iOS app..."
 
 # Prefer a booted simulator, fall back to first available iPhone
 SIM_ID=$(xcrun simctl list devices | grep -m1 'iPhone.*Booted' | sed 's/.*(\([A-F0-9-]*\)).*/\1/' 2>/dev/null)
@@ -114,7 +134,7 @@ xcodebuild -project HelloApp.xcodeproj \
 
 APP_PATH="$BUILD_DIR/Build/Products/Debug-iphonesimulator/HelloApp.app"
 
-echo "[4/4] Build complete!"
+echo "[5/5] Build complete!"
 echo ""
 echo "========================================"
 echo "  Build Success!"
