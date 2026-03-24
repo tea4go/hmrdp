@@ -23,6 +23,7 @@ targets:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.example.HelloApp
         SWIFT_VERSION: "5.0"
+        TOOLCHAINS: com.apple.dt.toolchain.XcodeDefault
         TARGETED_DEVICE_FAMILY: "1,2"
     dependencies:
       - framework: libarkui_ios.xcframework

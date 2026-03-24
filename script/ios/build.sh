@@ -7,6 +7,7 @@ set -e
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 PROJECT_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
 IOS_DIR="$PROJECT_ROOT/ios"
+ARKUI_XCFRAMEWORK="$IOS_DIR/libarkui_ios.xcframework"
 
 echo "========================================"
 echo "  iOS Build Script"
@@ -14,11 +15,50 @@ echo "========================================"
 echo ""
 
 # Validate SDK
-if [ ! -d "$IOS_DIR/libarkui_ios.xcframework" ]; then
+if [ ! -d "$ARKUI_XCFRAMEWORK" ]; then
     echo "ERROR: libarkui_ios.xcframework not found in $IOS_DIR"
     echo "Copy it from the ArkUI-X SDK: engine/xcframework/arkui/ios-release/libarkui_ios.xcframework"
     exit 1
 fi
+
+# Repair broken SDK packages that ship module.modulemap with `umbrella header "Ace.h"`
+# but miss the actual Headers/Ace.h file.
+create_ace_umbrella_if_missing() {
+    local framework_dir="$1"
+    local headers_dir="$framework_dir/Headers"
+    local module_map="$framework_dir/Modules/module.modulemap"
+    local ace_header="$headers_dir/Ace.h"
+
+    if [ ! -f "$module_map" ] || [ ! -d "$headers_dir" ] || [ -f "$ace_header" ]; then
+        return 0
+    fi
+
+    if grep -q 'umbrella header "Ace.h"' "$module_map"; then
+        cat > "$ace_header" <<'EOF'
+#ifndef LIBARKUI_IOS_ACE_H
+#define LIBARKUI_IOS_ACE_H
+
+#import "BridgeArray.h"
+#import "BridgePlugin.h"
+#import "BridgePluginManager.h"
+#import "IArkUIXPlugin.h"
+#import "IPlatformView.h"
+#import "MethodData.h"
+#import "PlatformViewFactory.h"
+#import "PluginContext.h"
+#import "ResultValue.h"
+#import "StageApplication.h"
+#import "StageViewController.h"
+#import "TaskOption.h"
+
+#endif /* LIBARKUI_IOS_ACE_H */
+EOF
+        echo "Patched missing umbrella header: $ace_header"
+    fi
+}
+
+create_ace_umbrella_if_missing "$ARKUI_XCFRAMEWORK/ios-arm64/libarkui_ios.framework"
+create_ace_umbrella_if_missing "$ARKUI_XCFRAMEWORK/ios-arm64_x86_64-simulator/libarkui_ios.framework"
 
 # Sync code first
 echo "[1/4] Syncing shared code..."
@@ -26,6 +66,12 @@ cd "$PROJECT_ROOT"
 ./sync-code.bat 2>/dev/null || ./sync-code.sh 2>/dev/null || true
 
 cd "$IOS_DIR"
+
+# Force default Xcode toolchain to avoid incompatible custom Swift toolchains.
+unset TOOLCHAINS
+unset SWIFT_EXEC
+unset SWIFT_EXEC_TOOLCHAIN_DIR
+unset SWIFT_DRIVER_SWIFT_FRONTEND_EXEC
 
 # Generate Xcode project via xcodegen
 echo "[2/4] Generating Xcode project..."
@@ -50,7 +96,8 @@ SIM_DEST=$(xcrun simctl list devices available | grep -m1 'iPhone' | sed 's/.*(\
 xcodebuild -project HelloApp.xcodeproj \
            -scheme HelloApp \
            -configuration Debug \
-           -destination "$SIM_DEST"
+           -destination "$SIM_DEST" \
+           TOOLCHAINS=com.apple.dt.toolchain.XcodeDefault
 
 echo "[4/4] Build complete!"
 echo ""
