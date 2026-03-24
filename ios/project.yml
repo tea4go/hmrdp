@@ -1,0 +1,29 @@
+name: HelloApp
+options:
+  bundleIdPrefix: com.example
+  deploymentTarget:
+    iOS: "12.0"
+  xcodeVersion: "14.0"
+
+targets:
+  HelloApp:
+    type: application
+    platform: iOS
+    deploymentTarget: "12.0"
+    sources:
+      - path: HelloApp
+        excludes:
+          - "Info.plist"
+          - "arkui-x/**"
+      - path: HelloApp/arkui-x
+        type: folder
+    info:
+      path: HelloApp/Info.plist
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.example.HelloApp
+        SWIFT_VERSION: "5.0"
+        TARGETED_DEVICE_FAMILY: "1,2"
+    dependencies:
+      - framework: libarkui_ios.xcframework
+        embed: true

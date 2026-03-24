@@ -6,6 +6,5 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "common": "file:../common"
   }
 }
