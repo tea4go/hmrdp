@@ -115,7 +115,7 @@ pod install
 xcodebuild -project HelloApp.xcodeproj \
   -scheme HelloApp \
   -configuration Debug \
-  -destination 'platform=iOS Simulator,name=iPhone 16'
+  -destination 'platform=iOS Simulator,name=iPhone 16e'
 ```
 
 也可以直接在仓库根目录执行一键脚本：
