@@ -79,6 +79,10 @@ pnpm-debug.log*
 android/app/src/main/ets/
 ios/HelloApp/ets/
 
+# Android 编译产物（由 HarmonyOS 构建生成，sync-assets.sh 同步）
+android/app/src/main/assets/arkui-x/entry/ets/modules.abc
+android/app/src/main/assets/arkui-x/entry/ets/sourceMaps.map
+
 # iOS 同步产物（由 sync-code.sh 生成）
 ios/HelloApp/arkui-x/entry/
 ios/HelloApp/arkui-x/systemres/
